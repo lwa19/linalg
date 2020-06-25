@@ -1,6 +1,6 @@
 ---
 title: "chapter1"
-author: "Lijia Wang"
+author: "Lijia Wang, Samantha Marglous"
 date: "2020-06-24"
 output: workflowr::wflow_html
 editor_options:
