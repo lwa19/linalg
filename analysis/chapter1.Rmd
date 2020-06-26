@@ -40,7 +40,6 @@ ge <- function(matrix) {
   ans <- rep(0, n)
   for (var in n:1) {
     ans[var] <- (new_matrix[var, n+1] - new_matrix[var, 1:n] %*% ans) / new_matrix[var, var]
-    print(ans[var])
   }
     
   return(ans)
