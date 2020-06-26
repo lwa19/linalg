@@ -23,7 +23,8 @@ setwd("~/Documents/GitHub/linalg/")
 ge <- function(matrix) {
   n <- dim(matrix)[1]
   new_matrix <- matrix
-
+  
+  # row reduction
   for (ind in 2:n) {
     for (row in ind:n) {
       # print(paste("ind", ind))
@@ -34,8 +35,15 @@ ge <- function(matrix) {
       new_matrix[row,] <- new_matrix[row,] - tmp
     }
   }
+  
+  # Back substitution
+  ans <- rep(0, n)
+  for (var in n:1) {
+    ans[var] <- (new_matrix[var, n+1] - new_matrix[var, 1:n] %*% ans) / new_matrix[var, var]
+    print(ans[var])
+  }
     
-  return(new_matrix)
+  return(ans)
 }
 ```
 
@@ -45,15 +53,46 @@ ge <- function(matrix) {
 ```{r}
 # 2x2, problem 3
 mat1 <- matrix(c(2,-1,-4,5,6,0), 2, 3)
+#      [,1] [,2] [,3]
+# [1,]    2   -4    6
+# [2,]   -1    5    0
 e1 <- ge(mat1)
+# [1] 5 1
 
 # 3x3, problem 10
 mat2 <- matrix(c(2,4,0,3,7,-2,1,5,2,8,20,0), 3, 4)
+#      [,1] [,2] [,3] [,4]
+# [1,]    2    3    1    8
+# [2,]    4    7    5   20
+# [3,]    0   -2    2    0
 e2 <- ge(mat2)
+# [1] 2 1 1
 
 # 4x4, problem 20
 mat3 <- matrix(c(2,1,0,0,1,2,1,0,0,1,2,1,0,0,1,2,0,0,0,5), 4,5)
+#      [,1] [,2] [,3] [,4] [,5]
+# [1,]    2    1    0    0    0
+# [2,]    1    2    1    0    0
+# [3,]    0    1    2    1    0
+# [4,]    0    0    1    2    5
 e3 <- ge(mat3)
+# [1] -1  2 -3  4
+
+# singular matrix on page 13 (no solution)
+mat4 <- matrix(c(1,2,4,1,2,4,1,5,8,5,6,7), 3,4)
+#      [,1] [,2] [,3] [,4]
+# [1,]    1    1    1    5
+# [2,]    2    2    5    6
+# [3,]    4    4    8    7
+e4 <- ge(mat4)
+
+# singular matrix (inf solution)
+mat5 <- matrix(c(1,2,4,1,2,4,1,4,8,5,6,12), 3,4)
+#      [,1] [,2] [,3] [,4]
+# [1,]    1    1    1    5
+# [2,]    2    2    4    6
+# [3,]    4    4    8    12
+e5 <- ge(mat5)
 ```
 
 
