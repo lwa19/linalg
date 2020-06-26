@@ -1,5 +1,5 @@
 ---
-title: "chapter1"
+title: "chapter1 exercises"
 author: "Lijia Wang, Samantha Marglous"
 date: "2020-06-24"
 output: workflowr::wflow_html
@@ -7,13 +7,11 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Introduction
-
 # Chapter 1.3, Gaussian Elimination
-
 ```{r, echo=FALSE}
 # Required packages
 library(workflowr)
+setwd("~/Documents/GitHub/linalg/")
 ```
 
 
@@ -56,15 +54,20 @@ e3 <- ge(mat3)
 ```
 
 
-```{r}
+```{r, eval=FALSE}
 # scratch
 
-# for (row in 2:n) {
-#       div <- matrix[row,1] / matrix[1,1]
-#       print(paste("div", div))
-#       tmp <- div * matrix[1,]
-#       print(paste("tmp", tmp))
-#       new_matrix[row,] <- matrix[row,] - tmp
-#     }
+for (row in 2:n) {
+      div <- matrix[row,1] / matrix[1,1]
+      print(paste("div", div))
+      tmp <- div * matrix[1,]
+      print(paste("tmp", tmp))
+      new_matrix[row,] <- matrix[row,] - tmp
+    }
+
+# run code below to update site:
+wflow_status()
+wflow_publish(c("analysis/chapter1.Rmd", "analysis/index.Rmd"), "updated workflowr site")
+wflow_git_push()
 ```
 
