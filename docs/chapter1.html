@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-06-25
+<strong>Last updated:</strong> 2020-06-26
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -528,22 +528,25 @@ relative
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlwa19linalgtree1a8302fc45fce90095e36a11f9b87d66e8d9438ctargetblank1a8302fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lwa19/linalg/tree/1a8302fc45fce90095e36a11f9b87d66e8d9438c" target="_blank">1a8302f</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlwa19linalgtree24a3841a95f1ab9c58c582f1bc620f8f38f1dc54targetblank24a3841a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lwa19/linalg/tree/24a3841a95f1ab9c58c582f1bc620f8f38f1dc54" target="_blank">24a3841</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomlwa19linalgtree1a8302fc45fce90095e36a11f9b87d66e8d9438ctargetblank1a8302fa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomlwa19linalgtree24a3841a95f1ab9c58c582f1bc620f8f38f1dc54targetblank24a3841a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/lwa19/linalg/tree/1a8302fc45fce90095e36a11f9b87d66e8d9438c" target="_blank">1a8302f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/lwa19/linalg/tree/24a3841a95f1ab9c58c582f1bc620f8f38f1dc54" target="_blank">24a3841</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
-working directory clean
+Ignored files:
+    Ignored:    .RData
+    Ignored:    .Rhistory
+
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
@@ -581,6 +584,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lwa19/linalg/blob/24a3841a95f1ab9c58c582f1bc620f8f38f1dc54/analysis/chapter1.Rmd" target="_blank">24a3841</a>
+</td>
+<td>
+Lijia Wang
+</td>
+<td>
+2020-06-26
+</td>
+<td>
+updated workflowr site
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lwa19/linalg/a0d44582281efbf2816e21e54a1184efe73bb428/docs/chapter1.html" target="_blank">a0d4458</a>
+</td>
+<td>
+Lijia Wang
+</td>
+<td>
+2020-06-25
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -767,7 +804,8 @@ create ch1 rmd file
 ge &lt;- function(matrix) {
   n &lt;- dim(matrix)[1]
   new_matrix &lt;- matrix
-
+  
+  # row reduction
   for (ind in 2:n) {
     for (row in ind:n) {
       # print(paste(&quot;ind&quot;, ind))
@@ -778,23 +816,75 @@ ge &lt;- function(matrix) {
       new_matrix[row,] &lt;- new_matrix[row,] - tmp
     }
   }
+  
+  # Back substitution
+  ans &lt;- rep(0, n)
+  for (var in n:1) {
+    ans[var] &lt;- (new_matrix[var, n+1] - new_matrix[var, 1:n] %*% ans) / new_matrix[var, var]
+    print(ans[var])
+  }
     
-  return(new_matrix)
+  return(ans)
 }</code></pre>
 </div>
 <div id="some-sample-matrices-from-exercises-in-1.3" class="section level2">
 <h2>Some sample matrices from exercises in 1.3</h2>
 <pre class="r"><code># 2x2, problem 3
 mat1 &lt;- matrix(c(2,-1,-4,5,6,0), 2, 3)
-e1 &lt;- ge(mat1)
+#      [,1] [,2] [,3]
+# [1,]    2   -4    6
+# [2,]   -1    5    0
+e1 &lt;- ge(mat1)</code></pre>
+<pre><code>[1] 1
+[1] 5</code></pre>
+<pre class="r"><code># [1] 5 1
 
 # 3x3, problem 10
 mat2 &lt;- matrix(c(2,4,0,3,7,-2,1,5,2,8,20,0), 3, 4)
-e2 &lt;- ge(mat2)
+#      [,1] [,2] [,3] [,4]
+# [1,]    2    3    1    8
+# [2,]    4    7    5   20
+# [3,]    0   -2    2    0
+e2 &lt;- ge(mat2)</code></pre>
+<pre><code>[1] 1
+[1] 1
+[1] 2</code></pre>
+<pre class="r"><code># [1] 2 1 1
 
 # 4x4, problem 20
 mat3 &lt;- matrix(c(2,1,0,0,1,2,1,0,0,1,2,1,0,0,1,2,0,0,0,5), 4,5)
+#      [,1] [,2] [,3] [,4] [,5]
+# [1,]    2    1    0    0    0
+# [2,]    1    2    1    0    0
+# [3,]    0    1    2    1    0
+# [4,]    0    0    1    2    5
 e3 &lt;- ge(mat3)</code></pre>
+<pre><code>[1] 4
+[1] -3
+[1] 2
+[1] -1</code></pre>
+<pre class="r"><code># [1] -1  2 -3  4
+
+# singular matrix on page 13 (no solution)
+mat4 &lt;- matrix(c(1,2,4,1,2,4,1,5,8,5,6,7), 3,4)
+#      [,1] [,2] [,3] [,4]
+# [1,]    1    1    1    5
+# [2,]    2    2    5    6
+# [3,]    4    4    8    7
+e4 &lt;- ge(mat4)</code></pre>
+<pre><code>[1] NaN
+[1] NaN
+[1] NaN</code></pre>
+<pre class="r"><code># singular matrix (inf solution)
+mat5 &lt;- matrix(c(1,2,4,1,2,4,1,4,8,5,6,12), 3,4)
+#      [,1] [,2] [,3] [,4]
+# [1,]    1    1    1    5
+# [2,]    2    2    4    6
+# [3,]    4    4    8    12
+e5 &lt;- ge(mat5)</code></pre>
+<pre><code>[1] NaN
+[1] NaN
+[1] NaN</code></pre>
 <pre class="r"><code># scratch
 
 for (row in 2:n) {
@@ -819,7 +909,7 @@ wflow_git_push()</code></pre>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 3.6.2 (2019-12-12)
 Platform: x86_64-apple-darwin15.6.0 (64-bit)
-Running under: macOS Catalina 10.15.4
+Running under: macOS Catalina 10.15.5
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
