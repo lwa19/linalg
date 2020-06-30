@@ -12,6 +12,7 @@ editor_options:
 ```{r, echo=FALSE}
 # Required packages
 library(workflowr)
+library(ramify)
 setwd("~/Documents/GitHub/linalg/")
 ```
 
@@ -27,6 +28,34 @@ ge <- function(matrix) {
   # row reduction
   for (ind in 2:n) {
     for (row in ind:n) {
+      div <- new_matrix[row,row-1] / new_matrix[row-1,row-1]
+      tmp <- div * new_matrix[row-1,]
+      new_matrix[row,] <- new_matrix[row,] - tmp
+    }
+  }
+  
+  # Back substitution
+  ans <- rep(0, n)
+  for (var in n:1) {
+    ans[var] <- (new_matrix[var, n+1] - new_matrix[var, 1:n] %*% ans) / new_matrix[var, var]
+  }
+    
+  return(ans)
+}
+```
+
+
+```{r}
+# write a function for Gaussian Elimination on nx(n+1) matrix
+ge <- function(matrix) {
+  n <- dim(matrix)[1]
+  new_matrix <- matrix
+  
+  # row reduction
+  for (ind in 2:n) {
+    for (row in ind:n) {
+      imax <- argmax(new_matrix,rows=FALSE)
+        
       div <- new_matrix[row,row-1] / new_matrix[row-1,row-1]
       tmp <- div * new_matrix[row-1,]
       new_matrix[row,] <- new_matrix[row,] - tmp
@@ -90,8 +119,9 @@ mat5 <- matrix(c(1,2,4,1,2,4,1,4,8,5,6,12), 3,4)
 # [3,]    4    4    8    12
 e5 <- ge(mat5)
 ```
-We can see that for singular matrices, the function will return NA's in the result matrix. 
 
+
+We can see that for singular matrices, the function will return NA's in the result matrix. 
 
 
 
@@ -107,6 +137,7 @@ for (row in 2:n) {
     }
 
 # run code below to update site:
+setwd('~/Documents/GitHub/linalg')
 wflow_status()
 wflow_publish(c("analysis/chapter1.Rmd", "analysis/index.Rmd"), "updated workflowr site")
 wflow_git_push()
