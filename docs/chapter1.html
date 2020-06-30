@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-06-26
+<strong>Last updated:</strong> 2020-06-30
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -528,24 +528,23 @@ relative
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlwa19linalgtreef0be95a0f68e00c748a8ec1bda2655ea363d71e0targetblankf0be95aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lwa19/linalg/tree/f0be95a0f68e00c748a8ec1bda2655ea363d71e0" target="_blank">f0be95a</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlwa19linalgtreeec6be83a44240d1db6ef6ce82e6acfa2da031811targetblankec6be83a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lwa19/linalg/tree/ec6be83a44240d1db6ef6ce82e6acfa2da031811" target="_blank">ec6be83</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomlwa19linalgtreef0be95a0f68e00c748a8ec1bda2655ea363d71e0targetblankf0be95aa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomlwa19linalgtreeec6be83a44240d1db6ef6ce82e6acfa2da031811targetblankec6be83a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/lwa19/linalg/tree/f0be95a0f68e00c748a8ec1bda2655ea363d71e0" target="_blank">f0be95a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/lwa19/linalg/tree/ec6be83a44240d1db6ef6ce82e6acfa2da031811" target="_blank">ec6be83</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
-    Ignored:    .RData
-    Ignored:    .Rhistory
+    Ignored:    .DS_Store
 
 </code></pre>
 <p>
@@ -584,6 +583,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lwa19/linalg/blob/ec6be83a44240d1db6ef6ce82e6acfa2da031811/analysis/chapter1.Rmd" target="_blank">ec6be83</a>
+</td>
+<td>
+smarglous
+</td>
+<td>
+2020-06-30
+</td>
+<td>
+updated workflowr site
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lwa19/linalg/e736bd8006793f10c32ea02e22b2dcfecec23428/docs/chapter1.html" target="_blank">e736bd8</a>
+</td>
+<td>
+Lijia Wang
+</td>
+<td>
+2020-06-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -899,6 +932,11 @@ create ch1 rmd file
 </div>
 <div id="chapter-1.3-gaussian-elimination" class="section level1">
 <h1>Chapter 1.3, Gaussian Elimination</h1>
+<pre><code>
+Attaching package: &#39;ramify&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:graphics&#39;:
+
+    clip</code></pre>
 <div id="gaussian-elimination-function" class="section level2">
 <h2>Gaussian Elimination Function</h2>
 <pre class="r"><code># write a function for Gaussian Elimination on nx(n+1) matrix
@@ -909,6 +947,30 @@ ge &lt;- function(matrix) {
   # row reduction
   for (ind in 2:n) {
     for (row in ind:n) {
+      div &lt;- new_matrix[row,row-1] / new_matrix[row-1,row-1]
+      tmp &lt;- div * new_matrix[row-1,]
+      new_matrix[row,] &lt;- new_matrix[row,] - tmp
+    }
+  }
+  
+  # Back substitution
+  ans &lt;- rep(0, n)
+  for (var in n:1) {
+    ans[var] &lt;- (new_matrix[var, n+1] - new_matrix[var, 1:n] %*% ans) / new_matrix[var, var]
+  }
+    
+  return(ans)
+}</code></pre>
+<pre class="r"><code># write a function for Gaussian Elimination on nx(n+1) matrix
+ge &lt;- function(matrix) {
+  n &lt;- dim(matrix)[1]
+  new_matrix &lt;- matrix
+  
+  # row reduction
+  for (ind in 2:n) {
+    for (row in ind:n) {
+      imax &lt;- argmax(new_matrix,rows=FALSE)
+        
       div &lt;- new_matrix[row,row-1] / new_matrix[row-1,row-1]
       tmp &lt;- div * new_matrix[row-1,]
       new_matrix[row,] &lt;- new_matrix[row,] - tmp
@@ -977,9 +1039,9 @@ e5 &lt;- ge(mat5)</code></pre>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 3.6.2 (2019-12-12)
+<pre><code>R version 3.6.3 (2020-02-29)
 Platform: x86_64-apple-darwin15.6.0 (64-bit)
-Running under: macOS Catalina 10.15.5
+Running under: macOS High Sierra 10.13.6
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
@@ -992,15 +1054,15 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.6.2
+[1] ramify_0.3.3    workflowr_1.6.2
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.3      rprojroot_1.3-2 digest_0.6.25   later_1.0.0    
- [5] R6_2.4.1        backports_1.1.5 git2r_0.26.1    magrittr_1.5   
+ [1] Rcpp_1.0.4      rprojroot_1.3-2 digest_0.6.25   later_1.1.0.1  
+ [5] R6_2.4.1        backports_1.1.8 git2r_0.27.1    magrittr_1.5   
  [9] evaluate_0.14   highr_0.8       stringi_1.4.6   rlang_0.4.5    
-[13] fs_1.3.2        promises_1.1.0  whisker_0.4     rmarkdown_2.1  
-[17] tools_3.6.2     stringr_1.4.0   glue_1.3.2      httpuv_1.5.2   
-[21] xfun_0.12       yaml_2.2.1      compiler_3.6.2  htmltools_0.4.0
+[13] fs_1.4.1        promises_1.1.1  whisker_0.4     rmarkdown_2.1  
+[17] tools_3.6.3     stringr_1.4.0   glue_1.4.0      httpuv_1.5.4   
+[21] xfun_0.12       yaml_2.2.1      compiler_3.6.3  htmltools_0.4.0
 [25] knitr_1.28     </code></pre>
 </div>
 </div>
