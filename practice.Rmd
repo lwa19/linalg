@@ -11,10 +11,13 @@ ge <- function(matrix) {
   
   # row reduction
   for (ind in 1:(n-1)) {
-    print(ind)
+     imax <- argmax(abs(new_matrix),rows = FALSE)[ind]
+    if (imax > ind){
+      save<-new_matrix[ind,]
+      new_matrix[ind,]<-new_matrix[imax,]
+      new_matrix[imax,]<-save
+    }
     for (row in (ind+1):n) {
-      imax <- argmax(new_matrix,rows = FALSE)
-        
       div <- new_matrix[row,ind] / new_matrix[ind,ind]
       print(div)
       tmp <- div * new_matrix[ind,]
@@ -32,6 +35,56 @@ ge <- function(matrix) {
   return(ans)
 }
 ```
+
+```{r}
+# write a function for Gaussian Elimination on nx(n+1) matrix
+ge <- function(matrix) {
+  n <- dim(matrix)[1]
+  new_matrix <- matrix
+  
+  # row reduction
+  for (ind in 1:(n-1)) {
+     imax <- (argmax(abs(new_matrix[ind:n,ind:(n+1)]),rows = FALSE)[ind])+(ind-1)
+     print(abs(new_matrix[ind:n,ind:(n+1)]))
+     print('index')
+     print(argmax(abs(new_matrix[ind:n,ind:(n+1)]),rows = FALSE))
+     print(ind)
+     print(imax)
+    if (imax > ind){
+      save<-new_matrix[ind,]
+      new_matrix[ind,]<-new_matrix[imax,]
+      new_matrix[imax,]<-save
+      print(new_matrix)
+    }
+    if (new_matrix[ind,ind] == 0){
+      print('singularity')
+    } else {
+      print('a')
+    for (row in (ind+1):n) {
+      div <- new_matrix[row,ind] / new_matrix[ind,ind]
+      print(div)
+      tmp <- div * new_matrix[ind,]
+      new_matrix[row,] <- new_matrix[row,] - tmp
+      print(new_matrix)
+    }
+    }
+}
+
+
+  
+  # Back substitution
+  ans <- rep(0, n)
+  for (var in n:1) {
+    ans[var] <- (new_matrix[var, n+1] - new_matrix[var, 1:n] %*% ans) / new_matrix[var, var]
+  }
+    
+  return(ans)
+}
+```
+
+
+
+
 
 
 ```{r}
@@ -79,3 +132,20 @@ mat5 <- matrix(c(1,2,4,1,2,4,1,4,8,5,6,12), 3,4)
 e5 <- ge(mat5)
 ```
 
+```{r}
+reorder <- function(matrix) {
+  n <- dim(matrix)[1]
+  new_matrix <- matrix
+  print(n)
+  for (ind in 1:(n-1)) {
+    imax <- argmax(abs(new_matrix),rows = FALSE)[ind]
+    if (imax > ind){
+      save<-new_matrix[ind,]
+      new_matrix[ind,]<-new_matrix[imax,]
+      new_matrix[imax,]<-save
+      print(new_matrix)
+    }
+  }
+}
+    
+```
