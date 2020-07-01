@@ -23,51 +23,48 @@ setwd("~/Documents/GitHub/linalg/")
 # write a function for Gaussian Elimination on nx(n+1) matrix
 ge <- function(matrix) {
   n <- dim(matrix)[1]
+  # print(n)
   new_matrix <- matrix
   
   # row reduction
-  for (ind in 2:n) {
-    for (row in ind:n) {
-      div <- new_matrix[row,row-1] / new_matrix[row-1,row-1]
-      tmp <- div * new_matrix[row-1,]
+  for (ind in 1:(n-1)) {
+     # print(paste("index is", ind))
+     slice <- abs(new_matrix[ind:n,ind:(n+1)])
+     # print(slice)
+     # slice <- as.matrix(slice, byrow=TRUE)
+     # print(slice)
+     # print(argmax(slice,rows = FALSE))
+     imax <- argmax(slice,rows = FALSE)[1]+(ind-1)
+     # print(paste("imax=", imax))
+    if (imax > ind){
+      save <- new_matrix[ind,]
+      new_matrix[ind,] <- new_matrix[imax,]
+      new_matrix[imax,] <- save
+      # print(new_matrix)
+    }
+    for (row in (ind+1):n) {
+      if (new_matrix[ind,ind] == 0){
+        return('singularity matrix')
+      } else {
+      div <- new_matrix[row,ind] / new_matrix[ind,ind]
+      # print(div)
+      tmp <- div * new_matrix[ind,]
       new_matrix[row,] <- new_matrix[row,] - tmp
+      # print(new_matrix)
+      }
     }
   }
-  
+
+  # check last pivot is non-zero
+  if (new_matrix[n,n] != 0) {
   # Back substitution
   ans <- rep(0, n)
   for (var in n:1) {
     ans[var] <- (new_matrix[var, n+1] - new_matrix[var, 1:n] %*% ans) / new_matrix[var, var]
   }
-    
-  return(ans)
-}
-```
-
-
-```{r}
-# write a function for Gaussian Elimination on nx(n+1) matrix
-ge <- function(matrix) {
-  n <- dim(matrix)[1]
-  new_matrix <- matrix
-  
-  # row reduction
-  for (ind in 2:n) {
-    for (row in ind:n) {
-      imax <- argmax(new_matrix,rows=FALSE)
-        
-      div <- new_matrix[row,row-1] / new_matrix[row-1,row-1]
-      tmp <- div * new_matrix[row-1,]
-      new_matrix[row,] <- new_matrix[row,] - tmp
-    }
+  } else {
+    return("singular matrix")
   }
-  
-  # Back substitution
-  ans <- rep(0, n)
-  for (var in n:1) {
-    ans[var] <- (new_matrix[var, n+1] - new_matrix[var, 1:n] %*% ans) / new_matrix[var, var]
-  }
-    
   return(ans)
 }
 ```
@@ -81,7 +78,7 @@ mat1 <- matrix(c(2,-1,-4,5,6,0), 2, 3)
 #      [,1] [,2] [,3]
 # [1,]    2   -4    6
 # [2,]   -1    5    0
-e1 <- ge(mat1)
+ge(mat1)
 # [1] 5 1
 
 # 3x3, problem 10
@@ -90,7 +87,7 @@ mat2 <- matrix(c(2,4,0,3,7,-2,1,5,2,8,20,0), 3, 4)
 # [1,]    2    3    1    8
 # [2,]    4    7    5   20
 # [3,]    0   -2    2    0
-e2 <- ge(mat2)
+ge(mat2)
 # [1] 2 1 1
 
 # 4x4, problem 20
@@ -100,28 +97,29 @@ mat3 <- matrix(c(2,1,0,0,1,2,1,0,0,1,2,1,0,0,1,2,0,0,0,5), 4,5)
 # [2,]    1    2    1    0    0
 # [3,]    0    1    2    1    0
 # [4,]    0    0    1    2    5
-e3 <- ge(mat3)
+ge(mat3)
 # [1] -1  2 -3  4
 
+# 4x4, alt example: 
+mat4 <- matrix(c(4,5,2,3,3,7,6,2,2,8,10,3,1,9,1,3,26,83,55,28), 4,5)
+ge(mat4)
+
 # singular matrix on page 13 (no solution)
-mat4 <- matrix(c(1,2,4,1,2,4,1,5,8,5,6,7), 3,4)
+mat5 <- matrix(c(1,2,4,1,2,4,1,5,8,5,6,7), 3,4)
 #      [,1] [,2] [,3] [,4]
 # [1,]    1    1    1    5
 # [2,]    2    2    5    6
 # [3,]    4    4    8    7
-e4 <- ge(mat4)
+ge(mat5)
 
 # singular matrix (inf solution)
-mat5 <- matrix(c(1,2,4,1,2,4,1,4,8,5,6,12), 3,4)
+mat6 <- matrix(c(1,2,4,1,2,4,1,4,8,5,6,12), 3,4)
 #      [,1] [,2] [,3] [,4]
 # [1,]    1    1    1    5
 # [2,]    2    2    4    6
 # [3,]    4    4    8    12
-e5 <- ge(mat5)
+ge(mat6)
 ```
-
-
-We can see that for singular matrices, the function will return NA's in the result matrix. 
 
 
 
