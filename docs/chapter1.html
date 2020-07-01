@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-06-30
+<strong>Last updated:</strong> 2020-07-01
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -528,16 +528,16 @@ relative
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlwa19linalgtreeec6be83a44240d1db6ef6ce82e6acfa2da031811targetblankec6be83a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lwa19/linalg/tree/ec6be83a44240d1db6ef6ce82e6acfa2da031811" target="_blank">ec6be83</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomlwa19linalgtree86c038b51d5d64e7fe71fc74ee51cb5e9d618485targetblank86c038ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/lwa19/linalg/tree/86c038b51d5d64e7fe71fc74ee51cb5e9d618485" target="_blank">86c038b</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomlwa19linalgtreeec6be83a44240d1db6ef6ce82e6acfa2da031811targetblankec6be83a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomlwa19linalgtree86c038b51d5d64e7fe71fc74ee51cb5e9d618485targetblank86c038ba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/lwa19/linalg/tree/ec6be83a44240d1db6ef6ce82e6acfa2da031811" target="_blank">ec6be83</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/lwa19/linalg/tree/86c038b51d5d64e7fe71fc74ee51cb5e9d618485" target="_blank">86c038b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -545,6 +545,16 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    .DS_Store
+    Ignored:    .RData
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/.DS_Store
+
+Untracked files:
+    Untracked:  analysis/practice.Rmd
+
+Unstaged changes:
+    Deleted:    practice.Rmd
 
 </code></pre>
 <p>
@@ -583,6 +593,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/lwa19/linalg/blob/86c038b51d5d64e7fe71fc74ee51cb5e9d618485/analysis/chapter1.Rmd" target="_blank">86c038b</a>
+</td>
+<td>
+Lijia Wang
+</td>
+<td>
+2020-07-01
+</td>
+<td>
+updated workflowr site
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/lwa19/linalg/74f92578641bcdae69d95fec7e94ecda4d936658/docs/chapter1.html" target="_blank">74f9257</a>
+</td>
+<td>
+smarglous
+</td>
+<td>
+2020-06-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -942,47 +986,48 @@ Attaching package: &#39;ramify&#39;</code></pre>
 <pre class="r"><code># write a function for Gaussian Elimination on nx(n+1) matrix
 ge &lt;- function(matrix) {
   n &lt;- dim(matrix)[1]
+  # print(n)
   new_matrix &lt;- matrix
   
   # row reduction
-  for (ind in 2:n) {
-    for (row in ind:n) {
-      div &lt;- new_matrix[row,row-1] / new_matrix[row-1,row-1]
-      tmp &lt;- div * new_matrix[row-1,]
+  for (ind in 1:(n-1)) {
+     # print(paste(&quot;index is&quot;, ind))
+     slice &lt;- abs(new_matrix[ind:n,ind:(n+1)])
+     # print(slice)
+     # slice &lt;- as.matrix(slice, byrow=TRUE)
+     # print(slice)
+     # print(argmax(slice,rows = FALSE))
+     imax &lt;- argmax(slice,rows = FALSE)[1]+(ind-1)
+     # print(paste(&quot;imax=&quot;, imax))
+    if (imax &gt; ind){
+      save &lt;- new_matrix[ind,]
+      new_matrix[ind,] &lt;- new_matrix[imax,]
+      new_matrix[imax,] &lt;- save
+      # print(new_matrix)
+    }
+    for (row in (ind+1):n) {
+      if (new_matrix[ind,ind] == 0){
+        return(&#39;singularity matrix&#39;)
+      } else {
+      div &lt;- new_matrix[row,ind] / new_matrix[ind,ind]
+      # print(div)
+      tmp &lt;- div * new_matrix[ind,]
       new_matrix[row,] &lt;- new_matrix[row,] - tmp
+      # print(new_matrix)
+      }
     }
   }
-  
+
+  # check last pivot is non-zero
+  if (new_matrix[n,n] != 0) {
   # Back substitution
   ans &lt;- rep(0, n)
   for (var in n:1) {
     ans[var] &lt;- (new_matrix[var, n+1] - new_matrix[var, 1:n] %*% ans) / new_matrix[var, var]
   }
-    
-  return(ans)
-}</code></pre>
-<pre class="r"><code># write a function for Gaussian Elimination on nx(n+1) matrix
-ge &lt;- function(matrix) {
-  n &lt;- dim(matrix)[1]
-  new_matrix &lt;- matrix
-  
-  # row reduction
-  for (ind in 2:n) {
-    for (row in ind:n) {
-      imax &lt;- argmax(new_matrix,rows=FALSE)
-        
-      div &lt;- new_matrix[row,row-1] / new_matrix[row-1,row-1]
-      tmp &lt;- div * new_matrix[row-1,]
-      new_matrix[row,] &lt;- new_matrix[row,] - tmp
-    }
+  } else {
+    return(&quot;singular matrix&quot;)
   }
-  
-  # Back substitution
-  ans &lt;- rep(0, n)
-  for (var in n:1) {
-    ans[var] &lt;- (new_matrix[var, n+1] - new_matrix[var, 1:n] %*% ans) / new_matrix[var, var]
-  }
-    
   return(ans)
 }</code></pre>
 </div>
@@ -993,8 +1038,9 @@ mat1 &lt;- matrix(c(2,-1,-4,5,6,0), 2, 3)
 #      [,1] [,2] [,3]
 # [1,]    2   -4    6
 # [2,]   -1    5    0
-e1 &lt;- ge(mat1)
-# [1] 5 1
+ge(mat1)</code></pre>
+<pre><code>[1] 5 1</code></pre>
+<pre class="r"><code># [1] 5 1
 
 # 3x3, problem 10
 mat2 &lt;- matrix(c(2,4,0,3,7,-2,1,5,2,8,20,0), 3, 4)
@@ -1002,8 +1048,9 @@ mat2 &lt;- matrix(c(2,4,0,3,7,-2,1,5,2,8,20,0), 3, 4)
 # [1,]    2    3    1    8
 # [2,]    4    7    5   20
 # [3,]    0   -2    2    0
-e2 &lt;- ge(mat2)
-# [1] 2 1 1
+ge(mat2)</code></pre>
+<pre><code>[1] 2 1 1</code></pre>
+<pre class="r"><code># [1] 2 1 1
 
 # 4x4, problem 20
 mat3 &lt;- matrix(c(2,1,0,0,1,2,1,0,0,1,2,1,0,0,1,2,0,0,0,5), 4,5)
@@ -1012,25 +1059,30 @@ mat3 &lt;- matrix(c(2,1,0,0,1,2,1,0,0,1,2,1,0,0,1,2,0,0,0,5), 4,5)
 # [2,]    1    2    1    0    0
 # [3,]    0    1    2    1    0
 # [4,]    0    0    1    2    5
-e3 &lt;- ge(mat3)
-# [1] -1  2 -3  4
+ge(mat3)</code></pre>
+<pre><code>[1] -1  2 -3  4</code></pre>
+<pre class="r"><code># [1] -1  2 -3  4
 
-# singular matrix on page 13 (no solution)
-mat4 &lt;- matrix(c(1,2,4,1,2,4,1,5,8,5,6,7), 3,4)
+# 4x4, alt example: 
+mat4 &lt;- matrix(c(4,5,2,3,3,7,6,2,2,8,10,3,1,9,1,3,26,83,55,28), 4,5)
+ge(mat4)</code></pre>
+<pre><code>[1] 1 5 2 3</code></pre>
+<pre class="r"><code># singular matrix on page 13 (no solution)
+mat5 &lt;- matrix(c(1,2,4,1,2,4,1,5,8,5,6,7), 3,4)
 #      [,1] [,2] [,3] [,4]
 # [1,]    1    1    1    5
 # [2,]    2    2    5    6
 # [3,]    4    4    8    7
-e4 &lt;- ge(mat4)
-
-# singular matrix (inf solution)
-mat5 &lt;- matrix(c(1,2,4,1,2,4,1,4,8,5,6,12), 3,4)
+ge(mat5)</code></pre>
+<pre><code>[1] &quot;singularity matrix&quot;</code></pre>
+<pre class="r"><code># singular matrix (inf solution)
+mat6 &lt;- matrix(c(1,2,4,1,2,4,1,4,8,5,6,12), 3,4)
 #      [,1] [,2] [,3] [,4]
 # [1,]    1    1    1    5
 # [2,]    2    2    4    6
 # [3,]    4    4    8    12
-e5 &lt;- ge(mat5)</code></pre>
-<p>We can see that for singular matrices, the function will return NA’s in the result matrix.</p>
+ge(mat6)</code></pre>
+<pre><code>[1] &quot;singularity matrix&quot;</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1039,9 +1091,9 @@ e5 &lt;- ge(mat5)</code></pre>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 3.6.3 (2020-02-29)
+<pre><code>R version 3.6.2 (2019-12-12)
 Platform: x86_64-apple-darwin15.6.0 (64-bit)
-Running under: macOS High Sierra 10.13.6
+Running under: macOS Catalina 10.15.5
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
@@ -1057,12 +1109,12 @@ other attached packages:
 [1] ramify_0.3.3    workflowr_1.6.2
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.4      rprojroot_1.3-2 digest_0.6.25   later_1.1.0.1  
- [5] R6_2.4.1        backports_1.1.8 git2r_0.27.1    magrittr_1.5   
+ [1] Rcpp_1.0.3      rprojroot_1.3-2 digest_0.6.25   later_1.0.0    
+ [5] R6_2.4.1        backports_1.1.5 git2r_0.26.1    magrittr_1.5   
  [9] evaluate_0.14   highr_0.8       stringi_1.4.6   rlang_0.4.5    
-[13] fs_1.4.1        promises_1.1.1  whisker_0.4     rmarkdown_2.1  
-[17] tools_3.6.3     stringr_1.4.0   glue_1.4.0      httpuv_1.5.4   
-[21] xfun_0.12       yaml_2.2.1      compiler_3.6.3  htmltools_0.4.0
+[13] fs_1.3.2        promises_1.1.0  whisker_0.4     rmarkdown_2.1  
+[17] tools_3.6.2     stringr_1.4.0   glue_1.3.2      httpuv_1.5.2   
+[21] xfun_0.12       yaml_2.2.1      compiler_3.6.2  htmltools_0.4.0
 [25] knitr_1.28     </code></pre>
 </div>
 </div>
