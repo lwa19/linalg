@@ -18,13 +18,15 @@ setwd("~/Documents/GitHub/linalg/")
 
 
 ## Gaussian Elimination Function
-
+Editing this to Perform LU Factorization
 ```{r}
 # write a function for Gaussian Elimination on nx(n+1) matrix
 ge <- function(matrix) {
   n <- dim(matrix)[1]
   # print(n)
   new_matrix <- matrix
+  P_matrix<-diag(n)
+  L_matrix<-diag(n)
   
   # row reduction
   for (ind in 1:(n-1)) {
@@ -40,17 +42,29 @@ ge <- function(matrix) {
       save <- new_matrix[ind,]
       new_matrix[ind,] <- new_matrix[imax,]
       new_matrix[imax,] <- save
-      # print(new_matrix)
+      #Swapping Permutation Matrix Rows Too
+      saveP <- P_matrix[ind,]
+      P_matrix[ind,] <- P_matrix[imax,]
+      P_matrix[imax,] <- saveP
+      #Swapping L Matrix locations
+      if (ind>1){
+        saveL <- L_matrix[ind,1:(ind-1)]
+        L_matrix[ind,1:(ind-1)] <- L_matrix[imax,1:(ind-1)]
+        L_matrix[imax,1:(ind-1)] <-saveL
+      }
     }
     for (row in (ind+1):n) {
       if (new_matrix[ind,ind] == 0){
         return('singularity matrix')
       } else {
       div <- new_matrix[row,ind] / new_matrix[ind,ind]
+      #Fill in L matrix
+      L_matrix[row,ind] <- div
       # print(div)
       tmp <- div * new_matrix[ind,]
       new_matrix[row,] <- new_matrix[row,] - tmp
-      # print(new_matrix)
+      print('new_matrix')
+      print(new_matrix)
       }
     }
   }
@@ -65,7 +79,7 @@ ge <- function(matrix) {
   } else {
     return("singular matrix")
   }
-  return(ans)
+  return(list(ans,L_matrix,P_matrix,new_matrix))
 }
 ```
 
@@ -122,6 +136,58 @@ ge(mat6)
 ```
 
 
+```{r}
+# Saved Version From 7/1 write a function for Gaussian Elimination on nx(n+1) matrix
+ge <- function(matrix) {
+  n <- dim(matrix)[1]
+  # print(n)
+  new_matrix <- matrix
+  
+  # row reduction
+  for (ind in 1:(n-1)) {
+     # print(paste("index is", ind))
+     slice <- abs(new_matrix[ind:n,ind:(n+1)])
+     # print(slice)
+     # slice <- as.matrix(slice, byrow=TRUE)
+     # print(slice)
+     # print(argmax(slice,rows = FALSE))
+     imax <- argmax(slice,rows = FALSE)[1]+(ind-1)
+     # print(paste("imax=", imax))
+    if (imax > ind){
+      save <- new_matrix[ind,]
+      new_matrix[ind,] <- new_matrix[imax,]
+      new_matrix[imax,] <- save
+      # print(new_matrix)
+    }
+    for (row in (ind+1):n) {
+      if (new_matrix[ind,ind] == 0){
+        return('singularity matrix')
+      } else {
+      div <- new_matrix[row,ind] / new_matrix[ind,ind]
+      # print(div)
+      tmp <- div * new_matrix[ind,]
+      new_matrix[row,] <- new_matrix[row,] - tmp
+      # print(new_matrix)
+      }
+    }
+  }
+
+  # check last pivot is non-zero
+  if (new_matrix[n,n] != 0) {
+  # Back substitution
+  ans <- rep(0, n)
+  for (var in n:1) {
+    ans[var] <- (new_matrix[var, n+1] - new_matrix[var, 1:n] %*% ans) / new_matrix[var, var]
+  }
+  } else {
+    return("singular matrix")
+  }
+  return(ans)
+}
+```
+
+
+
 
 ```{r, eval=FALSE, echo=FALSE}
 # scratch
@@ -139,5 +205,73 @@ setwd('~/Documents/GitHub/linalg')
 wflow_status()
 wflow_publish(c("analysis/chapter1.Rmd", "analysis/index.Rmd"), "updated workflowr site")
 wflow_git_push()
+```
+
+
+```{r}
+#Saved Version 7/2
+ge <- function(matrix) {
+  n <- dim(matrix)[1]
+  # print(n)
+  new_matrix <- matrix
+  P_matrix<-diag(n)
+  L_matrix<-diag(n)
+  
+  # row reduction
+  for (ind in 1:(n-1)) {
+     # print(paste("index is", ind))
+     slice <- abs(new_matrix[ind:n,ind:(n+1)])
+     # print(slice)
+     # slice <- as.matrix(slice, byrow=TRUE)
+     # print(slice)
+     # print(argmax(slice,rows = FALSE))
+     imax <- argmax(slice,rows = FALSE)[1]+(ind-1)
+     # print(paste("imax=", imax))
+    if (imax > ind){
+      save <- new_matrix[ind,]
+      new_matrix[ind,] <- new_matrix[imax,]
+      new_matrix[imax,] <- save
+      #Swapping Permutation Matrix Rows Too
+      saveP <- P_matrix[ind,]
+      P_matrix[ind,] <- P_matrix[imax,]
+      P_matrix[imax,] <- saveP
+      #Swapping L Matrix locations
+      if (ind>1){
+        pos<-seq(1,(ind-1),1)
+         for (position in pos){
+          saveL <- L_matrix[ind,position]
+          L_matrix[ind,position] <- L_matrix[imax,position]
+          L_matrix[imax,position] <-saveL
+        }
+      }
+    }
+    for (row in (ind+1):n) {
+      if (new_matrix[ind,ind] == 0){
+        return('singularity matrix')
+      } else {
+      div <- new_matrix[row,ind] / new_matrix[ind,ind]
+      #Fill in L matrix
+      L_matrix[row,ind] <- div
+      # print(div)
+      tmp <- div * new_matrix[ind,]
+      new_matrix[row,] <- new_matrix[row,] - tmp
+      print('new_matrix')
+      print(new_matrix)
+      }
+    }
+  }
+
+  # check last pivot is non-zero
+  if (new_matrix[n,n] != 0) {
+  # Back substitution
+  ans <- rep(0, n)
+  for (var in n:1) {
+    ans[var] <- (new_matrix[var, n+1] - new_matrix[var, 1:n] %*% ans) / new_matrix[var, var]
+  }
+  } else {
+    return("singular matrix")
+  }
+  return(list(ans,L_matrix,P_matrix,new_matrix))
+}
 ```
 
