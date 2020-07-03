@@ -212,7 +212,7 @@ wflow_git_push()
 ```
 
 
-```{r}
+```{r, echo=FALSE, eval=FALSE}
 #Saved Version 7/2
 ge <- function(matrix) {
   n <- dim(matrix)[1]
