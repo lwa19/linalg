@@ -13,6 +13,7 @@ editor_options:
 # Required packages
 library(workflowr)
 library(ramify)
+library(matrixcalc)
 setwd("~/Documents/GitHub/linalg/")
 ```
 
@@ -63,8 +64,8 @@ ge <- function(matrix) {
       # print(div)
       tmp <- div * new_matrix[ind,]
       new_matrix[row,] <- new_matrix[row,] - tmp
-      print('new_matrix')
-      print(new_matrix)
+      # print('new_matrix')
+      # print(new_matrix)
       }
     }
   }
@@ -79,7 +80,10 @@ ge <- function(matrix) {
   } else {
     return("singular matrix")
   }
-  return(list(ans,L_matrix,P_matrix,new_matrix))
+  return(list(ans = ans,
+              L = L_matrix,
+              P = P_matrix,
+              U = new_matrix))
 }
 ```
 
