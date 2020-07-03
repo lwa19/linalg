@@ -140,7 +140,7 @@ ge(mat6)
 ```
 
 
-```{r}
+```{r, eval=FALSE, echo=FALSE}
 # Saved Version From 7/1 write a function for Gaussian Elimination on nx(n+1) matrix
 ge <- function(matrix) {
   n <- dim(matrix)[1]
@@ -212,8 +212,9 @@ wflow_git_push()
 ```
 
 
-```{r, echo=FALSE, eval=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 #Saved Version 7/2
+
 ge <- function(matrix) {
   n <- dim(matrix)[1]
   # print(n)
