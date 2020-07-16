@@ -1,0 +1,37 @@
+---
+title: "practice"
+output: html_document
+---
+
+```{r,echo=FALSE}
+library(animation)
+setwd("~/Documents/GitHub/linalg/")
+```
+
+```{r}
+ani.options(interval = 0.2, nmax = 15)
+## a coin would stand on the table?? just kidding :)
+flip.coin(faces = c("Head", "Stand", "Tail"), type = "n", prob = c(0.45, 
+  0.1, 0.45), col = c(1, 2, 4))
+```
+
+```{r}
+rm(list=ls())
+n<-4
+x = sort(rnorm(n))
+y = rnorm(n)
+par(bg = "white")  # ensure the background color is white
+plot(x, y, type = "n")
+
+ani.record(reset = TRUE)  # clear history before recording
+
+for (i in 1:n) {
+  points(x[i], y[i], pch = 19, cex = 2)
+  ani.record()  # record the current frame
+}
+oopts = ani.options(interval = 2)
+ani.replay()
+
+saveHTML(ani.replay(), img.name = "record_plot")
+
+```
