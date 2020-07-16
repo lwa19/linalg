@@ -29,9 +29,46 @@ for (i in 1:n) {
   points(x[i], y[i], pch = 19, cex = 2)
   ani.record()  # record the current frame
 }
-oopts = ani.options(interval = 2)
-ani.replay()
+oopts = ani.options(interval = 0.2)
 
 saveHTML(ani.replay(), img.name = "record_plot")
 
 ```
+
+```{r} 
+#Edit
+rm(list=ls())
+par(bg = "white")  # ensure the background color is white
+ani.record(reset=TRUE)
+
+i1<-2
+i2<-0
+j1<-0
+j2<-1
+A <- matrix(c(i1,i2,j1,j2), 2, 2)
+
+
+
+vec<-c(1,1)
+n<-4
+for(j in 0:n){
+  gradientmat<-matrix(c(1+j/n*(A[1,1]-1),j/n*A[2,1],j/n*A[1,2],1+j/n*(A[2,2]-1)), 2, 2)
+  vecfinal<-gradientmat %*% vec
+  plot(1,type = "n",xlim=c(-5,5), ylim=c(-5,5),xlab="title")
+  for (grid in -4:4){
+  abline(h=grid,lty=2,col="gray")
+  abline(v=grid,lty=2,col="gray")
+  }
+  arrows(0, 0, vecfinal[1], vecfinal[2], length = 0.1, angle = 30,code = 2,col="black")
+  ani.record()
+}
+
+
+
+oopts = ani.options(interval = 0.2,loop=TRUE)
+ani.replay()
+saveHTML(ani.replay(), img.name = "practicing")
+
+```
+
+
