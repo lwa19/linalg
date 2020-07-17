@@ -54,7 +54,7 @@ for(j in 0:n){
 
 oopts = ani.options(interval = 0.05,loop=TRUE)
 #ani.replay()
-saveHTML(ani.replay(), img.name = "practicing", htmlfile = "analysis/animations.html")
+saveHTML(ani.replay(), img.name = "practicing", htmlfile = "animations.html")
 ```
 
 ### rotations (but not quite correctly)
@@ -94,7 +94,7 @@ for(j in 0:n){
 
 oopts = ani.options(interval = 0.05,loop=TRUE)
 #ani.replay()
-saveHTML(ani.replay(), img.name = "rotations1", htmlfile = "analysis/animations.html")
+saveHTML(ani.replay(), img.name = "rotations1", htmlfile = "animations.html")
 ```
 
 ### rotation (try again)
@@ -136,7 +136,7 @@ for(j in frames){
 
 oopts = ani.options(interval = 0.1,loop=T)
 # ani.replay()
-saveHTML(ani.replay(), img.name = "rotation2", htmlfile = "analysis/animations.html")
+saveHTML(ani.replay(), img.name = "rotation2", htmlfile = "animations.html")
 ```
 
 Result animations can be viewed [here](animations.html)
