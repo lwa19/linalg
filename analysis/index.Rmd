@@ -12,4 +12,4 @@ Selected exercises from Gilbert Strang "Linear Algebra and its Applications", 4t
 
 - Gaussian Elimination [link](chapter1.html)
 
-- Linear Transformations [link](linear_transformation.html)
+- Linear Transformations [link](linear_transformation.html) and their respective [animations](animations.html)
