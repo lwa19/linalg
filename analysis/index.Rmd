@@ -10,4 +10,6 @@ editor_options:
 
 Selected exercises from Gilbert Strang "Linear Algebra and its Applications", 4th Edition.
 
-Chapter 1: Gaussian Elimination [link](chapter1.html)
+- Gaussian Elimination [link](chapter1.html)
+
+- Linear Transformations [link](linear_transformation.html)
