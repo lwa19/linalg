@@ -75,8 +75,51 @@ for(j in 0:n){
 
 
 oopts = ani.options(interval = 0.05,loop=TRUE)
-ani.replay()
-saveHTML(ani.replay(), img.name = "practicing")
+#ani.replay()
+saveHTML(ani.replay(), img.name = "practicing", htmlfile = "animations.html")
+
+```
+```{r}
+# Rotation
+rm(list=ls())
+par(bg = "white")  # ensure the background color is white
+ani.record(reset=TRUE)
+
+vec<-c(1,1)
+add1<-c(-1,0.25)
+add2<-c(2,0.75)
+
+n <- 20
+frames <- seq(0, 2*pi, by=2*pi/n)
+
+for(j in frames){
+  i1<- cos(j)
+  i2<- sin(j)
+  j1<- -sin(j)
+  j2<- cos(j)
+  gradientmat <- matrix(c(i1,i2,j1,j2), 2, 2)
+  
+  vecfinal<-gradientmat %*% vec
+  add1final<-gradientmat %*% add1
+  add2final<-gradientmat %*% add2
+
+  plot(1,type = "n",xlim=c(-5,5), ylim=c(-5,5),xlab="title",main="f(a+b)=f(a)+f(b)")
+  for (grid in -4:4){
+  abline(h=grid,lty=2,col="gray")
+  abline(v=grid,lty=2,col="gray")
+  }
+  arrows(0, 0, vecfinal[1], vecfinal[2], length = 0.1, angle = 30,code = 2,col="black")
+  arrows(0, 0, add1final[1], add1final[2], length = 0.1, angle = 30,code = 2,col="green")
+  arrows(add1final[1], add1final[2], add1final[1]+add2final[1], add1final[2]+add2final[2], length = 0.1, angle = 30,code = 2,col="blue")
+
+  ani.record()
+}
+
+
+
+oopts = ani.options(interval = 0.1,loop=T)
+# ani.replay()
+saveHTML(ani.replay(), img.name = "rotation2", htmlfile = "animations.html")
 
 ```
 

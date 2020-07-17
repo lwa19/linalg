@@ -20,5 +20,5 @@ wflow_git_push()
 wflow_publish()
 wflow_git_push()
 
-# initialize new Rmd files: 
-wflow_open("chapter1.Rmd")
+# initialize new Rmd files:
+wflow_open("analysis/linear_transformation.Rmd")
