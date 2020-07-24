@@ -13,14 +13,14 @@ library(workflowr)
 
 ## Introduction
 
-Implementation of Singular Value Decomposition, a [thread](https://twitter.com/WomenInStat/status/1285610321747611653)
+Implementation of Singular Value Decomposition, a [thread](https://twitter.com/WomenInStat/status/1285610321747611653) from \@WomenInStat
 ```{r}
 rows = 50
 cols = 100
 x <- matrix(rnorm(rows*cols), ncol = cols)
 u <- rnorm(rows)
 v <- rnorm(cols)
-for (i in 1:cols) {
+for (i in 1:500) {
   u <- x%*%v
   u <- u/sqrt(sum(u^2))
   v <- t(x)%*%u
@@ -36,3 +36,4 @@ cor(svdx$u[,1],u)
 # workflowR commands
 wflow_publish(c("analysis/SVD.Rmd", "analysis/index.Rmd"), "added SVD algorithm. Need more explanation on SVD though.")
 wflow_git_push()
+```
