@@ -1,0 +1,38 @@
+---
+title: "SVD"
+author: "Lijia Wang"
+date: "2020-07-24"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+```{r, echo=FALSE}
+library(workflowr)
+```
+
+
+## Introduction
+
+Implementation of Singular Value Decomposition, a [thread](https://twitter.com/WomenInStat/status/1285610321747611653)
+```{r}
+rows = 50
+cols = 100
+x <- matrix(rnorm(rows*cols), ncol = cols)
+u <- rnorm(rows)
+v <- rnorm(cols)
+for (i in 1:cols) {
+  u <- x%*%v
+  u <- u/sqrt(sum(u^2))
+  v <- t(x)%*%u
+  v <- v/sqrt(sum(v^2))
+}
+
+svdx <- svd(x)
+cor(svdx$v[,1], v)
+cor(svdx$u[,1],u)
+```
+
+```{r, echo=FALSE, eval=FALSE}
+# workflowR commands
+wflow_publish(c("analysis/SVD.Rmd", "analysis/index.Rmd"), "added SVD algorithm. Need more explanation on SVD though.")
+wflow_git_push()
