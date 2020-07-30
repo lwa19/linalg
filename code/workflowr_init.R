@@ -21,4 +21,4 @@ wflow_publish()
 wflow_git_push()
 
 # initialize new Rmd files:
-wflow_open("analysis/linear_transformation.Rmd")
+wflow_open("analysis/SVD.Rmd")
